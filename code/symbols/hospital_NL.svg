@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="3200"
+   height="3200"
+   viewBox="0 0 846.66665 846.66666"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   sodipodi:docname="hospital_NL.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.114017"
+     inkscape:cx="-4130.9629"
+     inkscape:cy="2999.5527"
+     inkscape:window-width="3072"
+     inkscape:window-height="1659"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Laag 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g1">
+      <rect
+         style="fill:#1873b9;stroke:none;stroke-width:17.1978;stroke-dasharray:none;paint-order:fill markers stroke;fill-opacity:1"
+         id="rect1"
+         width="846.66669"
+         height="846.66669"
+         x="0"
+         y="0"
+         rx="53.991535"
+         ry="53.991535" />
+      <path
+         d="M 688.81314,754.06238 H 557.31845 V 467.66296 H 289.34821 V 754.06238 H 157.85352 V 92.604242 H 289.34821 V 375.01897 H 557.31845 V 92.604242 h 131.49469 z"
+         id="text1"
+         style="font-weight:bold;font-size:1020.08px;font-family:Carlito;-inkscape-font-specification:'Carlito, Bold';fill:#ffffff;stroke-width:5415.4;paint-order:fill markers stroke"
+         aria-label="H" />
+    </g>
+  </g>
+</svg>

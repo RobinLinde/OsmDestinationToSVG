@@ -126,6 +126,10 @@ my @bottom  = (0,0,0,0,0,0,0,0,0,0);
 @pinline  = ( 0,        0,   0,     0,       0)    if($conf->{country} eq 'SR');
 @bottom   = ( 0,        1,   0,     0,       1)    if($conf->{country} eq 'SR');
 
+@order    = ('country','symbol','ref','dest','to') if($conf->{country} eq 'NL');
+@pinline  = ( 0,        0,       0,    0,     0)   if($conf->{country} eq 'NL');
+@bottom   = ( 0,        0,       1,    0,     0)   if($conf->{country} eq 'NL');
+
 my $allowstack = 0;  
   
 #################################################
@@ -406,17 +410,19 @@ sub drawDivider {
 #################################################  
 sub duplicateTags {
   foreach my $d (@showdirections) {
-    
+
+# Temporarily disabled for now, as for Dutch signs always have a blue background, even if all destinations have a different background
+# Therefore, it is important that every destination has a background colour
 #Treat all colour identical as if there is just a single one      
-    foreach my $l (0..$conf->{$d}{totallanes}-1) {
-      foreach my $ta (qw(destination:colour colour:back colour:text)) {
-        if($store->{$d}[$l]{$ta} && (scalar @{$store->{$d}[$l]{$ta}}) >= 1) {
-          if (allsame(@{$store->{$d}[$l]{$ta}})) {
-            @{$store->{$d}[$l]{$ta}} = ($store->{$d}[$l]{$ta}[0]);
-            }
-          }
-        }
-      }
+    # foreach my $l (0..$conf->{$d}{totallanes}-1) {
+    #   foreach my $ta (qw(destination:colour colour:back colour:text)) {
+    #     if($store->{$d}[$l]{$ta} && (scalar @{$store->{$d}[$l]{$ta}}) >= 1) {
+    #       if (allsame(@{$store->{$d}[$l]{$ta}})) {
+    #         @{$store->{$d}[$l]{$ta}} = ($store->{$d}[$l]{$ta}[0]);
+    #         }
+    #       }
+    #     }
+    #   }
 
 #if all arrows are identical, then push to turn      
     foreach my $l (0..$conf->{$d}{totallanes}-1) {        
@@ -818,6 +824,14 @@ sub makeRef {
     if ($text =~ /^\s*A/) { $tcol = 'white'; $bcol = '#007f00';}
     if ($text =~ /^\s*E/) { $tcol = 'white'; $bcol = '#007f00';}
     }
+
+  if($conf->{country} eq 'NL') {
+    $bcol = 'white';
+    if ($text =~ /^\s*A\d/) { $tcol = 'white'; $bcol = '#e30000';}
+    if ($text =~ /^\s*N\d/) { $tcol = 'black'; $bcol = '#f6e725';}
+    if ($text =~ /^\s*R\d/) { $tcol = 'white'; $bcol = '#622b1b';}
+    if ($text =~ /^\s*E\s?\d/) { $tcol = 'white'; $bcol = '#24aa3f';}
+    }
     
   if($tags->{'destination:colour:ref'} && ($tags->{'destination:colour:ref'}[$entry] || scalar $tags->{'destination:colour:ref'} == 1)) {
     $bcol = $tags->{'colour:ref'}[$entry] // $tags->{'destination:colour:ref'}[0];
@@ -1018,7 +1032,11 @@ sub getBackground {
         ) {  
 #Main background        
       if($part eq 'back') {
-        $col = $tags->{'destination:colour'}[0];
+        if ($conf->{country} eq 'NL') {
+          $col = "#2e71b8";
+        } else {
+          $col = $tags->{'destination:colour'}[0];
+        }
         }
 #Main front        
       if ($part eq 'front') {
@@ -1030,6 +1048,9 @@ sub getBackground {
           }
         elsif ($conf->{country} eq 'AT' && $tags->{'destination:colour'}[0] eq 'green') {
           $col = 'yellow';
+          }
+        elsif ($conf->{country} eq 'NL') {
+          $col = 'white';
           }
         else {
           $col = bestTextColor($tags->{'destination:colour'}[0]);
@@ -1105,14 +1126,25 @@ sub getBackground {
           $col = "#f0e060" if $part eq 'back'; 
           $col = 'black'   if $part eq 'front';
           }
-        }        
+        }
+#Main NL
+      if ($conf->{country} eq 'NL') {
+        if(($store->{$d}[0]{'highway'}[0] eq 'cycleway')){
+          $col = "white" if $part eq 'back'; 
+          $col = 'red'   if $part eq 'front';
+          }
+        else {
+          $col = "#2e71b8" if $part eq 'back'; 
+          $col = 'white'   if $part eq 'front';
+          }
+        } 
       }
     }
     
   if($type eq '' || $type eq ':to') {
 #Entry front text  
     if ($part eq 'front') {
-      foreach my $ta ("colour:text","colour:$type:text","destination:colour:$type:text") {
+      foreach my $ta ("colour:text","colour:$type:text","destination:colour:text", "destination:colour:$type:text") {
         if ($tags->{$ta}[$i]) {  
           $col = $tags->{$ta}[$i];}
         else {  
@@ -1124,7 +1156,10 @@ sub getBackground {
 #Entry colour tags      
     if ($tags->{'destination:colour'.$type} && $tags->{'destination:colour'.$type}[$i]) {  
       if ($part eq 'back'){
-        $col = $tags->{'destination:colour'.$type}[$i]  
+        $col = $tags->{'destination:colour'.$type}[$i];
+        if ($conf->{country} eq 'NL' && $tags->{'destination:colour'.$type}[$i] eq 'brown') {
+          $col = '#622b1b';
+          }
         }
       if ($part eq 'front' && $col eq '') {
         $col = bestTextColor($tags->{'destination:colour'.$type}[$i]);
@@ -1166,8 +1201,26 @@ sub getBackground {
           $col = "#2568aa" if $part eq 'back'; 
           $col = 'white'   if $part eq 'front';
           }
-        }        
-      }      
+        }
+
+#Entry NL
+      if ($conf->{country} eq 'NL') {
+        if (($store->{$d}[0]{'highway'}[0] eq 'cycleway')) {
+          $col = "white" if $part eq 'back'; 
+
+          if($part eq 'front') {
+            if ($tags->{'destination:colour:text'}[$i] eq 'green') {
+              $col = '#34cb27';
+            } else {
+              $col = 'red';
+            }
+            }
+        } elsif (($tags->{'destination:colour'} && $tags->{'destination:colour'}[$i] eq 'brown')) {
+          $col = "#622b1b" if $part eq 'back';
+          $col = 'white'   if $part eq 'front';
+          }
+        }
+      }
     }
   if( $col eq '' && $part eq 'front') {
     $col = bestTextColor(getBackground($lane,0,'main','back'));
